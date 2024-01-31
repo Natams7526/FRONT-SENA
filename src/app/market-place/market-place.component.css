@@ -1,0 +1,30 @@
+.gallery-market {
+  display: flex;
+  justify-content: space-around;
+  flex-direction: row;
+}
+.example-card {
+  max-width: 300px;
+  max-height: 500px;
+}
+
+.example-header-image {
+  /* background-image: url("https://elasticbeanstalk-us-east-1-148301147089.s3.amazonaws.com/Logo+bda.png"); */
+  background-size: cover;
+}
+
+img {
+  object-fit: cover;
+  height: 200px;
+}
+
+mat-card-title {
+  font-size: medium;
+}
+/* Media query para dispositivos con un ancho máximo de 767px (común para teléfonos móviles) */
+@media only screen and (max-width: 767px) {
+  /* Estilos específicos para dispositivos móviles */
+  /* .example-card {
+    max-width: 50%;
+  } */
+}

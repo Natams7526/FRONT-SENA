@@ -1,0 +1,39 @@
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  background-color: #1c1c1c; /* Color del toolbar */
+  color: #ffffff; /* Color del texto en el toolbar */
+}
+
+.logo-section {
+  display: flex;
+  height: 40px;
+  width: 40px;
+  margin-right: 0.5em;
+}
+
+.app-title {
+  font-size: 20px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+}
+a {
+  text-decoration: none;
+  color: #ffffff;
+}
+.spacer {
+  flex: 1;
+}
+
+.nav-list {
+  display: flex;
+  gap: 10px;
+  font-size: 14px;
+}
+
+.profile-section {
+  display: flex;
+  align-items: center;
+  margin-left: 10px;
+}

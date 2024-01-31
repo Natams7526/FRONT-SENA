@@ -1,0 +1,90 @@
+<div *ngIf="loading"><app-loader></app-loader></div>
+<div *ngIf="!loading" class="crud-container">
+
+  <div class="options">
+    <div class="example-button-row">
+      <div class="example-flex-container">
+
+        <button color="accent" mat-icon-button>
+          <i class="fa-solid fa-circle-plus"></i>
+        </button>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- seccion formulario crear o editar nuevo miembro de equipo -->
+  <form [formGroup]="formulario" (ngSubmit)="crearNuevoDato()">
+    <div class="example-container">
+
+      <mat-form-field>
+        <input matInput placeholder="Nombre" formControlName="nombre" />
+        <mat-error *ngIf="formulario.controls['nombre'].hasError('required')">
+          El nombre es requerido.
+        </mat-error>
+        <mat-error *ngIf="formulario.controls['nombre'].hasError('minlength')">
+          El nombre debe tener al menos 3 caracteres.
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput placeholder="telefono" formControlName="phone" />
+        <mat-error *ngIf="formulario.controls['phone'].hasError('required')">
+          El nombre es requerido.
+        </mat-error>
+        <mat-error *ngIf="formulario.controls['phone'].hasError('minlength')">
+          El nombre debe tener al menos 10 caracteres.
+        </mat-error>
+      </mat-form-field>
+
+    </div>
+    <section>
+      <div class="example-button-row">
+        <button mat-flat-button color="primary" type="submit">Guardar</button>
+      </div>
+    </section>
+  </form>
+
+  <!-- Seccion de tabla para Equipo de trabajo -->
+  <div class="tabla">
+    <table mat-table [dataSource]="barberList" class="mat-elevation-z8 demo-table">
+      <!-- Position Column -->
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef>No.</th>
+        <td mat-cell *matCellDef="let element">{{ element.id }}</td>
+      </ng-container>
+      <!-- Position Column -->
+      <ng-container matColumnDef="image">
+        <th mat-header-cell *matHeaderCellDef>No.</th>
+        <td mat-cell *matCellDef="let element">
+          <mat-icon>
+            <img [src]="element.image_url" alt="image profile" />
+          </mat-icon>
+        </td>
+      </ng-container>
+
+      <!-- Name Column -->
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef>Name</th>
+        <td mat-cell *matCellDef="let element">{{ element.name }}</td>
+      </ng-container>
+      <!-- options Column -->
+      <ng-container matColumnDef="options">
+        <th mat-header-cell *matHeaderCellDef>Options</th>
+        <td mat-cell *matCellDef="let element">
+          <div class="td-optiones">
+            <button mat-icon-button class="example-icon" aria-label="update" (click)="updateData(element.id)">
+              <i class="fa-regular fa-pen-to-square"></i>
+            </button>
+            <button mat-icon-button class="example-icon" aria-label="delete" (click)="deleteData(element.id)">
+              <i class="fa-solid fa-ghost"></i>
+            </button>
+          </div>
+        </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns" class="data"></tr>
+    </table>
+  </div>
+
+</div>

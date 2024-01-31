@@ -1,0 +1,129 @@
+<div *ngIf="loading"><app-loader></app-loader></div>
+<div *ngIf="!loading" class="crud-container">
+  <!-- filtro para tabla -->
+  <div class="options">
+    <div class="example-button-row">
+      <div class="example-flex-container">
+        <mat-chip-listbox class="mat-mdc-chip-set-stacked" aria-label="Color selection">
+          <mat-chip-option [selected]="showCanceled" color="primary" (click)="toggleMostrarCitas()">
+            {{ showCanceled ? 'ver Activas' : 'ver canceladas' }}</mat-chip-option>
+        </mat-chip-listbox>
+        <button mat-icon-button (click)="isFilterOpen = !isFilterOpen">
+          <i class="fa-solid fa-filter"></i>
+        </button>
+        <button mat-icon-button color="primary" (click)="loadData()">
+          <i class="fa-solid fa-arrows-rotate"></i>
+        </button>
+        <button *ngIf="!isModalOpen" color="accent" mat-icon-button (click)="modalNuevaCita()">
+          <i class="fa-solid fa-circle-plus"></i>
+        </button>
+        <button *ngIf="isModalOpen" mat-icon-button color="warn" (click)="modalNuevaCita()">
+          <i class="fa-solid fa-circle-xmark"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- formulario creacion o edicion -->
+  <div *ngIf="isModalOpen" class="filter-container">
+    <app-booking-form *ngIf="isModalOpen" [appointmentDetails]="appointmentDetails">
+    </app-booking-form>
+  </div>
+
+  <!-- filtro de la tabla -->
+  <div *ngIf="isFilterOpen" class="filter-container">
+    <form [formGroup]="filtro" (ngSubmit)="loadData()">
+      <div>
+        <label>Filtro: </label>
+      </div>
+
+      <div class="example-form-fields">
+        <mat-form-field>
+          <mat-label>Seleccione un dia</mat-label>
+          <input matInput [matDatepicker]="fecha" formControlName="dayFilter" />
+          <mat-datepicker-toggle matIconSuffix [for]="fecha"></mat-datepicker-toggle>
+          <mat-datepicker #fecha></mat-datepicker>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Seleccione Barbero</mat-label>
+          <mat-select formControlName="barbero">
+            <mat-option value=0> Todos </mat-option>
+            <mat-option *ngFor="let barber of barberList" [value]="barber.id">{{
+              barber.name
+              }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <div>
+
+          <!-- <button mat-flat-button color="primary" type="submit">Filtrar</button> -->
+        </div>
+      </div>
+
+    </form>
+  </div>
+  <!-- Tabla de agenda -->
+
+  <div class="tabla">
+    <table mat-table [dataSource]="appointmentListShow" class="">
+      <ng-container matColumnDef="data">
+        <th mat-header-cell *matHeaderCellDef>{{daySelected | date : "fullDate" }}
+
+        </th>
+        <td *matCellDef="let element">
+          <div class="td-detalles" (click)="updateData(element)">
+            <div class="td-hora">
+              {{ element.timeStart | date : "shortTime" }}
+            </div>
+            <div class="td-barbero" [ngStyle]="{ 'background-color': element.barber.color }">
+              {{ element.barber.name }}
+            </div>
+            <div class="td-cliente">
+              {{ element.client.name }}
+            </div>
+          </div>
+          <div class="td-optiones">
+            <button class="btn-tabla-option" aria-label="delete" (click)="irAWhatsApp(element.client.phone)">
+              <i class="fa-brands fa-whatsapp"></i>
+              <!-- <mat-icon class="material-icons">play_circle_filled</mat-icon> -->
+            </button>
+            <div class="disapear-mobile">
+
+              <button class="btn-tabla-option" aria-label="update" *ngIf="!element.canceled"
+                (click)="updateData(element)">
+                <i class="fa-regular fa-pen-to-square"></i>
+              </button>
+              <!-- <button class="btn-tabla-option" aria-label="delete" (click)="cancelAppointment(element)">
+                @if (!element.canceled) {
+                <i class="fa-regular fa-trash-can"></i>
+
+                }@else {
+                <i class="fa-regular fa-floppy-disk"></i>
+                }
+
+              </button> -->
+            </div>
+            @if
+            (!element.canceled) {
+            <mat-slide-toggle class="example-margin" [color]="color" [checked]="checked" [disabled]="element.canceled"
+              (click)="cancelAppointment(element)">
+
+            </mat-slide-toggle>
+            }
+            <!-- <mat-chip-listbox class="mat-mdc-chip-set-stacked" aria-label="Color selection">
+
+              <mat-chip-option [selected]="element.canceled" color="accent" (click)="cancelAppointment(element)">@if
+                (!element.canceled) {
+                <i class="fa-regular fa-trash-can"></i>
+                }@else {
+                }</mat-chip-option>
+
+            </mat-chip-listbox> -->
+          </div>
+        </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr class="tr-row" mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+  </div>
+</div>

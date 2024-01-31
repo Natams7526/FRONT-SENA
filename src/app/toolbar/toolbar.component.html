@@ -1,0 +1,39 @@
+<mat-toolbar color="primary" class="toolbar">
+  <!-- Icono o título de la aplicación -->
+
+  <a href="/">
+    <span class="app-title">
+      <div class="logo-section">
+        <img src="https://elasticbeanstalk-us-east-1-148301147089.s3.amazonaws.com/facartalogo.png" alt="">
+      </div>
+      <!-- Puedes usar un icono en lugar del texto -->
+      Facarta.com
+    </span>
+  </a>
+
+  <!-- Espaciador para empujar los elementos al lado derecho -->
+  <span class="spacer"></span>
+
+  <!-- Menú de navegación -->
+  <!-- <mat-nav-list class="nav-list" *ngIf="isLoggedIn">
+    <a mat-list-item routerLink="/">Inicio</a>
+    <a mat-list-item (click)="irARuta(1)">Agendar</a>
+    <a mat-list-item (click)="irARuta(2)">Booking</a>
+    <a mat-list-item (click)="irARuta(3)">Barberos</a>
+  </mat-nav-list> -->
+
+  <!-- Sección de perfil -->
+  <span class="profile-section" *ngIf="isLoggedIn">
+    <button mat-icon-button>
+      <mat-icon>account_circle</mat-icon>
+    </button>
+    <!-- <mat-menu #profileMenu="matMenu">
+      <button mat-menu-item (click)="logout()">Cerrar sesión</button>
+    </mat-menu> -->
+  </span>
+
+  <!-- Botón de inicio de sesión -->
+  <button mat-button *ngIf="!isLoggedIn" routerLink="/login">
+    Iniciar sesión
+  </button>
+</mat-toolbar>

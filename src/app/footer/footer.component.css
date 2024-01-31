@@ -1,0 +1,68 @@
+.footer-container {
+  background-color: #1c1c1c; /* Color de fondo relacionado con una barbería vintage */
+  color: #ffffff; /* Color del texto */
+  padding: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.section {
+  flex: 1;
+  margin: 10px;
+}
+
+h3 {
+  color: #ffcc00; /* Color del encabezado */
+}
+
+p {
+  margin: 5px 0;
+}
+
+img {
+  height: 40px;
+  width: 40px;
+  margin-right: 10px;
+}
+.section.social-network {
+  display: flex;
+  justify-content: center;
+}
+.section.contact {
+  display: flex;
+  align-items: center;
+}
+
+.section.social-network h3 {
+  color: #ffcc00;
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.section.social-network a {
+  margin: 20px;
+  text-decoration: none;
+  color: #ffcc00;
+  transition: color 0.3s ease-in-out;
+}
+
+.section.social-network a:hover {
+  color: #ffffff;
+}
+
+.section.social-network i {
+  font-size: 20px;
+}
+
+/* Estilos específicos para pantallas pequeñas */
+@media screen and (max-width: 600px) {
+  .footer-container {
+    flex-direction: column;
+  }
+
+  .section {
+    width: 100%;
+  }
+}

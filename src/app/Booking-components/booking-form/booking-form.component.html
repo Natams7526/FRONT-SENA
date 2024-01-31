@@ -1,0 +1,254 @@
+<div *ngIf="loading"><app-loader></app-loader></div>
+<div *ngIf="!loading">
+  
+  <!-- seccion formulario   -->
+  
+  <mat-card *ngIf="isOpenForm">
+    <div class="cabecera">
+     <mat-card-header>
+      <mat-card-title>{{titulo}}</mat-card-title>
+    </mat-card-header>
+        <button class="boton-cerrar" mat-icon-button color="warn" (click)="cerrarDetalleCita()">
+          <i class="fa-solid fa-circle-xmark"></i>
+        </button>      
+    </div>     
+    <mat-divider></mat-divider>
+    <br />
+    <mat-card-content>
+      
+      <form *ngIf="!flatAlerta && !isOpenList && !isConsultList" [formGroup]="formulario" (ngSubmit)="saveAppointment()">
+        <!-- Select para el barbero -->
+        <mat-card-subtitle>1. Seleccione el barbero</mat-card-subtitle>
+        <section class="select-barber">
+          <mat-form-field>
+            <mat-label>Seleccione Barbero</mat-label>
+            <mat-select formControlName="barbero">
+              <mat-option *ngIf="appointmentDetails" [value]="barberSelected">{{barberSelected.name}}</mat-option>
+              <mat-option *ngFor="let barber of barberList" [value]="barber">
+                {{ barber.name }}
+              </mat-option>
+
+            </mat-select>
+
+            <mat-error *ngIf="formulario.controls['barbero'].hasError('required')">
+              El barbero es requerido.
+            </mat-error>
+          </mat-form-field>
+          <section *ngIf="barberSelected !== ''; else profileDemo">          
+            <mat-icon>
+              <img [src]="barberSelected.image_url" alt="image profile" />
+            </mat-icon>
+          </section>
+          <ng-template #profileDemo>
+            <mat-icon>
+              <img [src]="urlImgProfileDefault" alt="image profile demo" />
+            </mat-icon>
+          </ng-template>
+        </section>
+
+        <!-- Datapicker para la fecha  -->
+        <mat-card-subtitle>2. Indicanos el dia y la hora</mat-card-subtitle>
+        <section *ngIf="barberSelected">
+
+          <mat-form-field>
+            <mat-label>Seleccione un dia</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName="daySelected" />
+            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+          <!-- select para la hora  -->
+          <mat-form-field>
+            <mat-label>@if (horaCitaList.length > 0) {
+              Horas disponibles
+
+              }@else {
+              No cuenta con agenda disponible!
+              }
+            </mat-label>
+            <mat-select formControlName="horaCita">
+              <mat-option *ngIf="appointmentDetails" [value]="horaCitaSelected">
+                {{horaCitaSelected.timeReal | date :"shortTime"}}</mat-option>
+              <mat-option *ngFor="let timeReal of horaCitaList" [value]="timeReal">
+                {{ timeReal.timeReal | date : "shortTime" }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </section>
+
+        <!-- seccion para el datos del cliente -->
+
+        <mat-card-subtitle>3. Tus Datos</mat-card-subtitle>
+        <section *ngIf="horaCitaSelected.timeReal || appointmentDetails">
+
+          <mat-form-field hintLabel="Max 10 caracteres">
+            <mat-label>WhatsApp / movil </mat-label>
+
+            <input matInput #input type="tel" placeholder="ej: 3001234567" formControlName="phone" maxlength="10" />
+            <mat-hint align="end">{{input.value.length}}/10</mat-hint>
+            <mat-error *ngIf="formulario.controls['phone'].hasError('required')">
+              Numero de contacto es requerido.
+            </mat-error>
+            <mat-error *ngIf="formulario.controls['phone'].hasError('pattern')">
+              Numero de contacto debe ser solo numeros de 10 caracteres.
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Nombre y Apellido</mat-label>
+            <input matInput placeholder="ej: Will Smith" formControlName="cliente" />
+            <mat-error *ngIf="formulario.controls['cliente'].hasError('required')">
+              El nombre es requerido.
+            </mat-error>
+            <mat-error *ngIf="formulario.controls['cliente'].hasError('pattern')">
+              Asegurate de no incluir numeros o caracteres especiales, pon tu
+              nombre y apellido.
+            </mat-error>
+          </mat-form-field>
+<<<<<<< HEAD
+        </section>
+        <mat-divider></mat-divider>
+        <mat-card-actions>
+          <div class="button-form">
+            <button *ngIf="appointmentDetails" mat-flat-button color="warn"
+              (click)="cancelAppointment(appointmentDetails)">
+              Cancelar
+            </button>
+            <button *ngIf="!appointmentDetails" mat-flat-button color="accent" (click)="irAWhatsApp()">
+              Ir a WhatsApp
+            </button>        
+          <button mat-flat-button color="warn" (click)="iraMyAppointment()">
+           Mis citas
+         </button> 
+            <button *ngIf="!flatAlerta" mat-flat-button color="primary" type="submit">
+              @if (appointmentDetails) {
+              Actualizar
+              }@else{
+              Agendar
+              }
+            </button>
+          </div>
+        </mat-card-actions>
+=======
+        </section>      
+
+>>>>>>> f04bcb4 (funcion editar cita desde modulo cliente)
+      </form>
+       
+
+      <!-- seccion alerta cita creada -->
+
+      <div *ngIf="flatAlerta">
+        <h2>Estimado {{clientSelected}} su cita quedo agendada para la fecha: {{daySelected |
+          date:"medium"}}, con tu
+          Barbero
+          {{barberSelected}} ,
+          Recuerda llegar puntual, Gracias por preferirnos!</h2>
+        </div>
+        <!-- seccion mis citas -->
+        <div *ngIf="isOpenList">
+          <form >
+            <mat-form-field hintLabel="Max 10 caracteres">
+              <mat-label>WhatsApp / movil </mat-label>              
+              <input matInput #input type="tel" placeholder="ej: 3001234567"  maxlength="10" />
+              <mat-hint align="end">{{input.value.length}}/10</mat-hint>
+              <mat-error *ngIf="formulario.controls['phone'].hasError('required')">
+                Numero de contacto es requerido.
+              </mat-error>
+            </mat-form-field>
+          </form>
+          </div>
+
+          <!-- seccion para mostrar el detalle de las citas hacia el cliente -->
+          <mat-divider></mat-divider> 
+          <br>
+          <div *ngIf="true">     
+                 <mat-card class="example-card">
+                <div class="appointment-card">
+                  <mat-icon>
+                    <img mat-card-sm-image [src]="urlImgProfileDefault" >
+                  </mat-icon>                
+                  <mat-card-header>                    
+                      <mat-card-title-group>
+                      <mat-card-title>Detalles de la cita</mat-card-title>
+                      <mat-card-subtitle>Dia:</mat-card-subtitle>
+                      <mat-card-subtitle>Hora:</mat-card-subtitle>
+                      <mat-card-subtitle>Barbero:</mat-card-subtitle>
+                      </mat-card-title-group>                    
+                  </mat-card-header>
+                </div>
+              
+              <mat-card-actions>
+              <div class="button-form">
+                 <button mat-stroked-button color="warn">
+                   Cancelar cita
+                 </button>
+                 <button mat-stroked-button color="accent">
+                   Editar cita
+                 </button>
+              </div>
+            </mat-card-actions>
+              </mat-card>
+           
+              <mat-divider></mat-divider>  
+
+              <!-- *********   Manejo de alertas****************************** -->
+              <div class="alerta">
+                  <mat-card-header>
+                    <mat-card-title-group>
+                      <mat-card-title>No tienes citas pendientes</mat-card-title>
+                      <mat-card-subtitle>asumimos que luces mas o menos asi:</mat-card-subtitle>
+                    </mat-card-title-group>
+                  </mat-card-header>
+                  <mat-icon>
+                    <img mat-card-sm-image src="https://material.angular.io/assets/img/examples/shiba2.jpg"  alt="Image of a Shiba Inu">
+                  </mat-icon>
+                  <mat-card-subtitle>puedes agendar dando click en nueva cita</mat-card-subtitle>
+                </div>
+
+                <mat-divider></mat-divider>  
+
+                <div class="alerta">         
+                    <mat-card-subtitle>Estas cancelando la cita del dia:</mat-card-subtitle>             
+                    <mat-card-subtitle>Detalles de la cita</mat-card-subtitle>
+                    <mat-card-subtitle>Dia:</mat-card-subtitle>
+                    <mat-card-subtitle>Hora:</mat-card-subtitle>
+                    <mat-card-subtitle>Barbero:</mat-card-subtitle>
+                    <mat-icon>                      
+                      <i class="fa-solid fa-triangle-exclamation"></i>                      
+                    </mat-icon>
+                    <mat-card-subtitle>¿Estas seguro que deseas cancelarla?</mat-card-subtitle>
+                                     
+                  </div>
+          </div>
+    </mat-card-content>
+    
+
+    <!-- seccion botonera -->
+    <mat-divider></mat-divider>  
+    <mat-card-actions>
+      <div class="button-form">
+        <button *ngIf="!appointmentDetails" mat-flat-button color="accent" (click)="irAWhatsApp()">
+          ir a WhatsApp
+        </button>      
+      <button mat-stroked-button color="primary" (click)="iraMyAppointment()">
+       Mis citas
+     </button> 
+        <button *ngIf="!flatAlerta" mat-flat-button color="primary" type="submit">
+          @if (appointmentDetails) {
+          Actualizar
+          }@else{
+          Agendar
+          }
+        </button>
+        <button *ngIf="!isConsultList" mat-stroked-button color="accent" (click)="nuevaCita()">
+          Nueva cita
+        </button>
+        <button mat-flat-button color="accent">
+          Si
+        </button>
+        <button mat-flat-button color="warn">
+          No
+        </button>
+      </div>
+    </mat-card-actions>
+  </mat-card>
+</div>
